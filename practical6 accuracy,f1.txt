@@ -1,0 +1,55 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import(
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    confusion_matrix,
+    classification_report
+)
+d = pd.read_csv("breast.csv").drop(columns=["id", "Unnamed: 32"], errors="ignore")
+X = d.drop("diagnosis", axis=1)
+y = d.diagnosis.map({"B": 0, "M": 1})
+x1, x2, y1, y2 = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y)
+s = StandardScaler()
+x1, x2 = s.fit_transform(x1), s.transform(x2)
+models = [LogisticRegression(max_iter=1000), KNeighborsClassifier(5)]
+names = ["Logistic Regression", "KNN"]
+results, cms = [], []
+for m in models:
+    m.fit(x1, y1)
+    p = m.predict(x2)
+    results.append([
+        accuracy_score(y2, p),
+        precision_score(y2, p),
+        recall_score(y2, p),
+        f1_score(y2, p)
+    ])
+    cms.append(confusion_matrix(y2, p))
+fig, ax = plt.subplots(1, 2, figsize=(12, 5))
+for i in range(2):
+    sns.heatmap(cms[i], annot=True, fmt="d",
+    cmap=["Blues", "Greens"][i], ax=ax[i])
+    ax[i].set_title(names[i])
+    ax[i].set_xlabel("Predicted")
+    ax[i].set_ylabel("Actual")
+plt.tight_layout()
+plt.show()
+df = pd.DataFrame(results, index=names,
+columns=["Accuracy", "Precision", "Recall", "F1-Score"])
+print("\nModel Performance:")
+print(df.to_string())
+df.plot(kind="bar", ylim=(0, 1.05), figsize=(10, 6),
+title="Logistic Regression vs KNN")
+plt.ylabel("Score")
+plt.legend(loc="lower right")
+plt.tight_layout()
+plt.show()

@@ -1,0 +1,60 @@
+
+from collections import deque
+import time
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['D', 'E'],
+    'C': ['F', 'G'],
+    'D': [],
+    'E': ['H'],
+    'F': [],
+    'G': ['H'],
+    'H': []
+}
+
+def bfs(start, goal):
+    queue = deque([(start, [start])])
+    visited = []
+    while queue:
+        node, path = queue.popleft()
+        if node not in visited:
+            visited.append(node)
+            if node == goal:
+                return path, len(visited)
+            for n in graph[node]:
+                queue.append((n, path + [n]))
+    return None, len(visited)
+
+def dfs(start, goal):
+    stack = [(start, [start])]
+    visited = []
+    while stack:
+        node, path = stack.pop()
+        if node not in visited:
+            visited.append(node)
+            if node == goal:
+                return path, len(visited)
+            for n in reversed(graph[node]):
+                stack.append((n, path + [n]))
+    return None, len(visited)
+
+start, goal = 'A', 'H'
+
+t = time.time()
+bpath, bn = bfs(start, goal)
+bt = time.time() - t
+
+t = time.time()
+dpath, dn = dfs(start, goal)
+dt = time.time() - t
+
+print("BFS Path:", bpath)
+print("BFS Path Length:", len(bpath)-1)
+print("BFS Nodes Explored:", bn)
+print("BFS Time:", bt)
+
+print("\nDFS Path:", dpath)
+print("DFS Path Length:", len(dpath)-1)
+print("DFS Nodes Explored:", dn)
+print("DFS Time:", dt)

@@ -1,0 +1,37 @@
+
+
+def smart_home_agent(temp, motion, darkness, security):
+    print("\n----- SMART HOME REPORT -----")
+
+    if motion == "yes" and darkness == "yes":
+        print("Light: ON")
+    else:
+        print("Light: OFF")
+
+
+    if temp > 30:
+        print("Fan: ON")
+    else:
+        print("Fan: OFF")
+
+    if temp > 35:
+        print("AC: ON")
+    else:
+        print("AC: OFF")
+
+    if security == "yes":
+        print("Door: LOCKED")
+    else:
+        print("Door: UNLOCKED")
+
+    print("Agent decision completed!")
+
+
+print("SMART HOME INTELLIGENT AGENT")
+
+temp = int(input("Enter temperature: "))
+motion = input("Motion detected? (yes/no): ").lower()
+darkness = input("Is room dark? (yes/no): ").lower()
+security = input("Is security mode ON? (yes/no): ").lower()
+
+smart_home_agent(temp, motion, darkness, security)

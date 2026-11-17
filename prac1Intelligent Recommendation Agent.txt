@@ -1,0 +1,59 @@
+
+
+def recommendation_agent(category, interest, mood):
+
+    print("\n===== RECOMMENDATION RESULT =====")
+
+    if category == "movie":
+
+        if interest == "comedy":
+            print("Recommended Movie: 3 Idiots")
+        elif interest == "action":
+            print("Recommended Movie: Bahubali")
+        elif interest == "romance":
+            print("Recommended Movie: Jab We Met")
+        else:
+            print("Recommended Movie: Dangal")
+
+    elif category == "music":
+
+        if mood == "happy":
+            print("Recommended Music: Party Songs")
+        elif mood == "sad":
+            print("Recommended Music: Relaxing Songs")
+        elif mood == "angry":
+            print("Recommended Music: Calm Music")
+        else:
+            print("Recommended Music: Classical Music")
+
+    elif category == "book":
+
+        if interest == "story":
+            print("Recommended Book: Harry Potter")
+        elif interest == "knowledge":
+            print("Recommended Book: A Brief History of Time")
+        else:
+            print("Recommended Book: The Alchemist")
+
+    elif category == "game":
+
+        if interest == "action":
+            print("Recommended Game: Action Games")
+        elif interest == "puzzle":
+            print("Recommended Game: Sudoku")
+        else:
+            print("Recommended Game: Chess")
+
+    else:
+        print("Invalid category!")
+
+    print("Recommendation completed!")
+
+
+print("===== INTELLIGENT RECOMMENDATION SYSTEM =====")
+
+category = input("Choose movie/music/book/game: ").lower()
+interest = input("Enter your interest (comedy/action/story/knowledge/puzzle): ").lower()
+mood = input("Enter your mood (happy/sad/angry/normal): ").lower()
+
+recommendation_agent(category, interest, mood)

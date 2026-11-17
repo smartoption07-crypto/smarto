@@ -1,0 +1,66 @@
+
+class Rule:
+    def __init__(self, premises, conclusion):
+        self.premises = premises
+        self.conclusion = conclusion
+
+rules = [
+    Rule(["Fever", "Cough"], "Flu"),
+    Rule(["Flu", "Bodypain"], "ViralInfection"),
+    Rule(["ViralInfection"], "NeedRest")
+]
+
+facts = ["Fever", "Cough", "Bodypain"]
+
+def forward_chaining(facts, rules):
+    known_fact = facts.copy()
+
+    print("Initial Facts:", known_fact)
+
+    while True:
+        added = False
+
+        for rule in rules:
+            print("Checking Rule:", rule.premises, "->", rule.conclusion)
+
+            if all(p in known_fact for p in rule.premises):
+                if rule.conclusion not in known_fact:
+                    known_fact.append(rule.conclusion)
+                    print("New Fact Added:", rule.conclusion)
+                    added = True
+
+        if not added:
+            break
+
+    print("Final Facts:", known_fact)
+
+def backward_chaining(goal, facts, rules):
+    print("Checking Goal:", goal)
+
+    if goal in facts:
+        print("Fact Found:", goal)
+        return True
+
+    for rule in rules:
+        if rule.conclusion == goal:
+            print("Applying Rule:", rule.premises, "->", goal)
+
+            if all(backward_chaining(p, facts, rules)
+                   for p in rule.premises):
+                print("Goal Proved:", goal)
+                return True
+
+    print("Goal Not Proved:", goal)
+    return False
+
+print("\n===== FORWARD CHAINING =====")
+forward_chaining(facts, rules)
+
+print("\n===== BACKWARD CHAINING =====")
+goal = "NeedRest"
+result = backward_chaining(goal, facts, rules)
+
+if result:
+    print("Goal can be proved")
+else:
+    print("Goal cannot be proved")

@@ -1,0 +1,44 @@
+
+
+def chatbot_agent(message):
+    message = message.lower()
+
+    if "hello" in message or "hi" in message:
+        return "Hello! Welcome to AI Chatbot."
+
+    elif "name" in message:
+        return "I am an Intelligent Chatbot."
+
+    elif "how are you" in message:
+        return "I am fine. How can I help you?"
+
+    elif "study" in message:
+        return "You should make a timetable and study daily."
+
+    elif "python" in message:
+        return "Python is a popular programming language."
+
+    elif "ai" in message:
+        return "AI means Artificial Intelligence."
+
+    elif "thank" in message:
+        return "You are welcome!"
+
+    elif "bye" in message:
+        return "Goodbye! Have a nice day."
+
+    else:
+        return "Sorry, I don't understand. Ask another question."
+
+
+print("===== INTELLIGENT CHATBOT =====")
+print("Type bye to exit.")
+
+while True:
+    user = input("\nYou: ")
+
+    response = chatbot_agent(user)
+    print("Bot:", response)
+
+    if "bye" in user.lower():
+        break

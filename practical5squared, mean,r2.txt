@@ -1,0 +1,68 @@
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures, StandardScaler
+from sklearn.pipeline import make_pipeline
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+data = pd.read_csv("mydata.csv")
+
+X = data.drop("MedHouseVal", axis=1)
+y = data["MedHouseVal"]
+
+print("Dataset Loaded Successfully!")
+print("Dataset Shape:", X.shape)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42)
+
+
+models = {
+    "Linear Regression": LinearRegression(),
+    "Polynomial Regression": make_pipeline(
+        PolynomialFeatures(2, include_bias=False),
+        StandardScaler(),
+        LinearRegression())
+}
+
+results = []
+predictions = []
+for name, model in models.items():
+    model.fit(X_train, y_train)
+    pred = model.predict(X_test)
+    predictions.append(pred)
+
+    mse = mean_squared_error(y_test, pred)
+    mae = mean_absolute_error(y_test, pred)
+    r2 = r2_score(y_test, pred)
+
+    results.append([name, mse, mae, r2])
+
+df = pd.DataFrame(results, columns=["Model", "MSE", "MAE", "R2 Score"])
+
+print("\nMODEL COMPARISON")
+print(df.round(4).to_string(index=False))
+
+df.to_csv("regression_results.csv", index=False)
+print("\nResults saved successfully!")
+
+plt.figure(figsize=(10, 4))
+
+for i, (name, pred, color) in enumerate(
+    zip(models.keys(), predictions, ["blue", "red"]), 1):
+
+    plt.subplot(1, 2, i)
+    plt.scatter(y_test, pred, color=color, alpha=0.3)
+    plt.xlabel("Actual House Value")
+    plt.ylabel("Predicted House Value")
+    plt.title(name)
+    plt.grid()
+
+plt.tight_layout()
+plt.savefig("regression_comparison.png")
+plt.show()
+
+print("Best Model:", df.loc[df["R2 Score"].idxmax(), "Model"])
+print("\nPractical Completed Successfully!")
